@@ -1,4 +1,4 @@
-# pi-config · Decapod Atelier
+# pi-config · Decapod
 
 [![🦀 Decapod](https://img.shields.io/badge/🦀%20Decapod-v0.99.4-dc2626)](https://github.com/DecapodLabs/decapod)
 
@@ -8,7 +8,7 @@ remember.
 
 ## What is included
 
-- `themes/decapod-atelier.json` — a dark, high-contrast atelier theme.
+- `themes/decapod.json` — a dark, high-contrast Decapod theme.
 - `prompts/` — `/orient`, `/review`, `/ship`, and `/handoff` prompt templates.
 - `extensions/decapod.ts` — the automatic Decapod governance front door for pi:
   safety evaluation, orientation, context resolution, Decision Gates,
@@ -53,7 +53,7 @@ checkout is mounted at a nonstandard path.
 Because links point at this checkout, `git pull` updates the installed files
 and the running pi session reloads them automatically. Move the checkout only
 after rerunning the installer. To remove the package, remove the three
-`pi-config-decapod` / `decapod-atelier` links and revert the settings keys
+`pi-config-decapod` / `decapod` links and revert the settings keys
 using your backup.
 
 ## Governed rhythm
@@ -93,7 +93,7 @@ only public Decapod CLI commands and never writes `.decapod` state directly.
 From an isolated Decapod workspace:
 
 ```bash
-python3 -m json.tool themes/decapod-atelier.json >/dev/null
+python3 -m json.tool themes/decapod.json >/dev/null
 bash -n install.sh
 npx --yes prettier --check extensions/decapod.ts prompts/*.md README.md
 decapod validate
