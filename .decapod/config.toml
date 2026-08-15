@@ -1,0 +1,49 @@
+schema_version = "1.0.0"
+
+[init]
+specs = true
+ci = true
+diagram_style = "ascii"
+entrypoints = [
+    "AGENTS.md",
+    "CLAUDE.md",
+    "GEMINI.md",
+    "CODEX.md",
+]
+
+[repo]
+product_name = "pi-config"
+product_summary = "A Decapod-centered pi agent workflow with automatic intent governance and proof-gated completion"
+architecture_direction = "A thin pi extension uses public Decapod interfaces; Decapod owns governance state and proof"
+product_type = "application"
+done_criteria = "Automatic intent governance and passing Decapod validation before publication"
+base_branch = "master"
+primary_languages = ["TypeScript"]
+detected_surfaces = [
+    "cli",
+    "pi",
+]
+external_tracker = false
+container_workspaces = true
+backend = "local"
+declared_capabilities = [
+    "agent-helper",
+    "governance-kernel",
+    "persistent-state",
+]
+
+[governance]
+protected_paths = []
+approval_categories = ["destructive_operations"]
+
+[proof]
+commands = []
+
+[custody]
+isolation = "container"
+
+[tracker]
+provider = "decapod"
+
+[context]
+declared_sources = []

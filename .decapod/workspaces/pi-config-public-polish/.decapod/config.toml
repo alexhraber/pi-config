@@ -1,0 +1,49 @@
+schema_version = "1.0.0"
+
+[init]
+specs = true
+ci = true
+diagram_style = "mermaid"
+entrypoints = [
+    "AGENTS.md",
+    "CLAUDE.md",
+    "GEMINI.md",
+    "CODEX.md",
+]
+
+[repo]
+product_name = "pi-config"
+product_summary = "A Decapod-centered pi agent workflow with an elegant theme, reusable prompt templates, and a lightweight governance extension."
+architecture_direction = "cli"
+product_type = "application"
+done_criteria = "The pi configuration is installable, Decapod validation passes, and the integration never claims proof without evidence."
+base_branch = "master"
+primary_languages = ["TypeScript"]
+detected_surfaces = [
+    "cli",
+    "pi",
+]
+external_tracker = false
+container_workspaces = false
+backend = "local"
+declared_capabilities = [
+    "agent-helper",
+    "governance-kernel",
+    "persistent-state",
+]
+
+[governance]
+protected_paths = []
+approval_categories = ["destructive_operations"]
+
+[proof]
+commands = []
+
+[custody]
+isolation = "worktree"
+
+[tracker]
+provider = "decapod"
+
+[context]
+declared_sources = []
