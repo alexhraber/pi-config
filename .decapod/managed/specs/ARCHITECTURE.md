@@ -7,6 +7,26 @@ Composable repository architecture with explicit boundaries and proof-backed del
 agent-unknown-code-01m03n8eft9536bp-01m03n8r is a service_or_library project built using shell, typescript, typescript/javascript.
 Composable repository architecture with explicit boundaries and proof-backed delivery invariants.
 
+### Personal pi runtime architecture
+
+pi-config is a personal, global pi configuration: theme, prompts, installation
+settings, and a thin Decapod governance extension for the complete pi agent
+loop. Decapod remains authoritative for safety, context, decisions, and proof;
+pi-config owns the personal presentation and integration experience.
+
+The runtime is intentionally quiet and event-driven:
+
+1. pi receives natural-language intent.
+2. `extensions/decapod.ts` asynchronously invokes public Decapod commands for safety, orientation, context resolution, and preflight.
+3. A governed request packet preserves original intent and unresolved uncertainty for the model.
+4. `tool_call` and `user_bash` boundaries apply a second safety gate before side effects.
+5. Agent settlement invokes inference and repository validation, then persists a compact pi session checkpoint through pi's session API.
+6. The UI exposes only the current phase, profile, Decision Gate, or proof state.
+
+The extension must not become a second governance kernel, block pi's event loop,
+or directly mutate `.decapod` state. Profiles are presentation/context hints,
+not policy bypasses.
+
 Architectural principles:
 - **Simplicity**: Keep components focused and reusable.
 - **Modularity**: Clearly defined interface boundaries and dependency separation.
@@ -157,7 +177,7 @@ sequenceDiagram
 
 ## Codebase Attestation
 
-- Repository signal fingerprint: `9e64570421f244e715e44edb937989d319ea3617ea1eb16f49722db75e9d61e8`
+- Repository signal fingerprint: `83dddd873634d93dcc4ee8220c1c4948cd2267e2e16058c38bd476b8ab547a49`
 - Significant implementation surfaces: `.github/` (1 files), `README.md/` (1 files), `package.json/` (1 files)
 - Refreshed from the current codebase by `decapod specs.refresh`
 <!-- decapod:codebase-attestation:end -->
