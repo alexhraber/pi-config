@@ -28,10 +28,18 @@ Generated interface specs should include:
 | `TODO` | `TODO` | `TODO` | `TODO` | `TODO` |
 
 ## Inbound Contracts
-- API / RPC entrypoints:
-- CLI surfaces:
-- Event/webhook consumers:
+- API / RPC entrypoints: Decapod RPC is used for governed spec refresh and validation.
+- CLI surfaces: `install.sh` installs the `decapod.ts` pi extension, the `decapod.json` theme, and prompt links into `~/.pi/agent`; `decapod validate` verifies repository governance.
+- Event/webhook consumers: none.
 - Repository-detected surfaces: npm, shell, typescript
+
+### Pi Configuration Resource Contract
+The installer owns the current Decapod resource names: the extension is
+`extensions/decapod.ts`, the theme is `themes/decapod.json`, and the settings
+selection is `decapod`. Installation is idempotent, removes obsolete legacy
+resource links/settings, preserves unrelated pi settings, and backs up the
+settings file before mutation. The extension must load without startup errors;
+its auto-reload watcher tracks these current resource names.
 
 ## Data Ownership
 - Source-of-truth tables/collections:
@@ -100,7 +108,7 @@ export enum ApiErrorCode {
 
 ## Codebase Attestation
 
-- Repository signal fingerprint: `2d8bc2faa5f87438c12e86db4c94b024e926a881e45594481e3a93b5d3f11032`
+- Repository signal fingerprint: `706a529149a02a0f8daff28f0d2f5345bc8eea169ee9726882a43964b0f1aa96`
 - Significant implementation surfaces: `.github/` (1 files), `README.md/` (1 files), `package.json/` (1 files)
 - Refreshed from the current codebase by `decapod specs.refresh`
 <!-- decapod:codebase-attestation:end -->
