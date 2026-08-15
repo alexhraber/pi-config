@@ -1,48 +1,72 @@
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
-import { spawnSync } from "node:child_process";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 
+const execFileAsync = promisify(execFile);
 const protocol = `
 ## Decapod operating protocol
 
-This task is governed by Decapod. Preserve the user's exact original intent and
-scope. Keep intent, context, assumptions, uncertainty, action, evidence, and
-proof distinct. Decapod orientation and context are required before non-trivial
-inference. A Decision Gate is a request for human judgment: stop and ask, never
-guess. Confidence is not evidence. Do not claim completion unless the claim is
-backed by named, observed proof; report unavailable or failed checks honestly.
-Use only public Decapod CLI commands and never write .decapod state directly.
+Preserve the user's exact original intent and scope. Keep intent, context,
+assumptions, uncertainty, action, evidence, and proof distinct. Orient and
+resolve context before non-trivial inference. A Decision Gate requests human
+judgment: stop and ask, never guess. Confidence is not evidence. Never claim
+completion without named, observed proof. Use only public Decapod CLI commands;
+never write .decapod state directly.
 `;
 
 type JsonObject = Record<string, unknown>;
 type Result = { ok: boolean; text: string; json?: unknown };
+type UiContext = {
+  ui: {
+    setWidget: (id: string, lines: string[]) => void;
+    setStatus: (id: string, text: string | undefined) => void;
+    notify: (text: string, level: "info" | "warning" | "error") => void;
+  };
+};
 
-function run(args: string[], input?: string): Result {
-  const result = spawnSync("decapod", args, {
-    input,
-    encoding: "utf8",
-    timeout: 20_000,
-    maxBuffer: 512 * 1024,
-  });
-  const stdout = result.stdout ?? "";
-  const stderr = result.stderr ?? "";
-  let json: unknown;
+async function run(args: string[], input?: string): Promise<Result> {
   try {
-    json = JSON.parse(stdout);
-  } catch {
-    /* text remains useful */
-  }
-  if (result.error)
+    const { stdout = "", stderr = "" } = await execFileAsync("decapod", args, {
+      input,
+      encoding: "utf8",
+      timeout: 20_000,
+      maxBuffer: 512 * 1024,
+    });
+    let json: unknown;
+    try {
+      json = JSON.parse(stdout);
+    } catch {
+      /* text remains useful */
+    }
+    return {
+      ok: true,
+      text: `${stdout}${stderr}`.trim() || "Decapod returned no output.",
+      json,
+    };
+  } catch (error) {
+    const failure = error as {
+      stdout?: string;
+      stderr?: string;
+      message?: string;
+      code?: number | string;
+      killed?: boolean;
+    };
+    const text =
+      `${failure.stdout ?? ""}${failure.stderr ?? ""}`.trim() ||
+      failure.message ||
+      "Unable to run Decapod.";
+    let json: unknown;
+    try {
+      json = JSON.parse(failure.stdout ?? "");
+    } catch {
+      /* text remains useful */
+    }
     return {
       ok: false,
-      text: `Unable to run Decapod: ${result.error.message}`,
+      text: `${text}${failure.killed ? " (timed out)" : ""}`,
+      json,
     };
-  if (result.signal)
-    return { ok: false, text: `Decapod stopped by ${result.signal}.` };
-  return {
-    ok: result.status === 0,
-    text: `${stdout}${stderr}`.trim() || "Decapod returned no output.",
-    json,
-  };
+  }
 }
 
 function object(value: unknown): JsonObject | undefined {
@@ -50,11 +74,9 @@ function object(value: unknown): JsonObject | undefined {
     ? (value as JsonObject)
     : undefined;
 }
-
 function status(value: unknown): string | undefined {
   return object(value)?.status?.toString().toLowerCase();
 }
-
 function hasDecisionGate(value: unknown): boolean {
   if (typeof value === "string")
     return /(?:decision\s*gate|approval required|human\s+(?:judgment|decision))\s*[:：-]\s*(?:yes|true|required|pending|open)/i.test(
@@ -63,9 +85,9 @@ function hasDecisionGate(value: unknown): boolean {
   if (Array.isArray(value)) return value.some(hasDecisionGate);
   if (value && typeof value === "object")
     return Object.entries(value).some(([key, child]) => {
-      const gateField =
-        /decision.?gate|approval|human.?judgment|requires.?decision/i.test(key);
-      if (gateField) {
+      if (
+        /decision.?gate|approval|human.?judgment|requires.?decision/i.test(key)
+      ) {
         if (child === true) return true;
         if (typeof child === "string")
           return !/^(?:none|false|no|resolved|closed|optional)$/i.test(
@@ -80,65 +102,90 @@ function hasDecisionGate(value: unknown): boolean {
     });
   return false;
 }
-
-function display(result: Result, max = 16): string[] {
+function display(result: Result, max = 14): string[] {
   const source =
     result.json === undefined
       ? result.text
       : JSON.stringify(result.json, null, 2);
   return source.split("\n").slice(0, max);
 }
-
-function lastAssistantText(ctx: {
+function assistantText(ctx: {
   sessionManager: { getBranch: () => unknown[] };
 }): string {
   const branch = ctx.sessionManager.getBranch();
   for (let i = branch.length - 1; i >= 0; i--) {
-    const entry = object(branch[i]);
-    const message = object(entry?.message);
+    const message = object(object(branch[i])?.message);
     if (message?.role !== "assistant") continue;
-    const content = message.content;
-    if (typeof content === "string") return content;
-    if (Array.isArray(content))
-      return content
+    if (typeof message.content === "string") return message.content;
+    if (Array.isArray(message.content))
+      return message.content
         .map((part) => object(part)?.text)
         .filter((text): text is string => typeof text === "string")
         .join("\n");
   }
   return "";
 }
+function toolText(toolName: string, input: unknown): string {
+  return `Agent tool request (${toolName}):\n${JSON.stringify(input, null, 2)}`;
+}
 
 export default function decapod(pi: ExtensionAPI) {
   let originalIntent = "";
   let orientation: Result | undefined;
+  let profile = "general";
+  let proofState = "not-run";
+
+  const widget = (ctx: UiContext, title: string, lines: string[] = []) =>
+    ctx.ui.setWidget("decapod", [title, ...lines]);
   const show = (
-    ctx: { ui: { setWidget: (id: string, lines: string[]) => void } },
+    ctx: UiContext,
     title: string,
     result: Result,
     extra: string[] = [],
-  ) => ctx.ui.setWidget("decapod", [title, ...extra, ...display(result)]);
+  ) => widget(ctx, title, [...extra, ...display(result)]);
+  const setPhase = (ctx: UiContext, phase: string) =>
+    ctx.ui.setStatus("decapod", `🦀 ${phase} · ${profile}`);
 
-  pi.on("session_start", (_event, ctx) => {
+  pi.on("session_start", async (_event, ctx) => {
     originalIntent = "";
     orientation = undefined;
-    ctx.ui.setStatus("decapod", "🦀 governed");
-    ctx.ui.setWidget("decapod", ["🦀 Decapod  ·  intent → context → proof"]);
+    proofState = "not-run";
+    for (const entry of ctx.sessionManager.getEntries()) {
+      const custom = object(entry);
+      if (
+        custom?.type !== "custom" ||
+        custom.customType !== "decapod-checkpoint"
+      )
+        continue;
+      const data = object(custom.data);
+      if (typeof data?.intent === "string") originalIntent = data.intent;
+      if (typeof data?.profile === "string") profile = data.profile;
+      if (typeof data?.proof === "string") proofState = data.proof;
+    }
+    setPhase(ctx, proofState === "passed" ? "proof available" : "ready");
+    widget(ctx, "🦀 Decapod · intent → context → proof", [
+      "quiet governance active",
+      "Ctrl+Shift+D status · Ctrl+Shift+P preflight",
+    ]);
   });
 
-  // Unsafe, unoriented, or unresolved work never reaches the model. The exact
-  // original text is passed unchanged to Decapod and retained in the packet.
-  pi.on("input", (event, ctx) => {
+  pi.on("input", async (event, ctx) => {
     if (!event.text.trim() || event.source === "extension") return;
     const intent = event.text.trim();
-    const evaluation = run(["eval", "--stdin", "--format", "json"], event.text);
+    setPhase(ctx, "evaluating");
+    const evaluation = await run(
+      ["eval", "--stdin", "--format", "json"],
+      event.text,
+    );
     if (!evaluation.ok || status(evaluation.json) !== "allow") {
+      setPhase(ctx, "human review");
       ctx.ui.notify("Decapod stopped this prompt for human review.", "error");
       show(ctx, "🛑 Decapod safety gate", evaluation, [
         "The original intent was not sent to the agent.",
       ]);
       return { action: "handled" as const };
     }
-    const orient = run([
+    const orient = await run([
       "infer",
       "orientation",
       "--intent",
@@ -147,8 +194,9 @@ export default function decapod(pi: ExtensionAPI) {
       "json",
     ]);
     if (!orient.ok || hasDecisionGate(orient.json ?? orient.text)) {
+      setPhase(ctx, "Decision Gate");
       ctx.ui.notify(
-        "Decapod orientation requires human judgment before work can continue.",
+        "Orientation requires human judgment before work can continue.",
         "warning",
       );
       show(ctx, "🛑 Decapod Decision Gate", orient, [
@@ -157,8 +205,15 @@ export default function decapod(pi: ExtensionAPI) {
       ]);
       return { action: "handled" as const };
     }
-    const context = run(["rpc", "--op", "context.resolve", "--params", "{}"]);
+    const context = await run([
+      "rpc",
+      "--op",
+      "context.resolve",
+      "--params",
+      "{}",
+    ]).catch(() => ({ ok: false, text: "Context resolution failed." }));
     if (!context.ok || hasDecisionGate(context.json ?? context.text)) {
+      setPhase(ctx, "context gate");
       ctx.ui.notify(
         "Decapod could not resolve governed context; work is paused.",
         "warning",
@@ -170,7 +225,7 @@ export default function decapod(pi: ExtensionAPI) {
     }
     originalIntent = intent;
     orientation = orient;
-    const preflight = run([
+    const preflight = await run([
       "context",
       "preflight",
       "--op",
@@ -178,62 +233,158 @@ export default function decapod(pi: ExtensionAPI) {
       "--format",
       "json",
     ]);
+    setPhase(ctx, "oriented");
     show(ctx, "🧭 Decapod orientation ready", preflight, [
-      "intent preserved · context resolved · assumptions must remain explicit",
+      "intent preserved · context resolved · assumptions remain explicit",
     ]);
     return { action: "continue" as const };
   });
 
   pi.on("before_agent_start", (event) => {
     const governed = originalIntent
-      ? `\n\n## Governed request packet\nOriginal user intent (verbatim):\n${originalIntent}\n\nDecapod orientation (machine output):\n${orientation?.text ?? "unavailable"}\n\nCarry unresolved assumptions and uncertainty forward. Distinguish evidence from confidence. Before saying complete, name the exact checks and observed results; if proof is unavailable, say so and escalate.`
+      ? `\n\n## Governed request packet\nProfile: ${profile}\nOriginal user intent (verbatim):\n${originalIntent}\n\nDecapod orientation (machine output):\n${orientation?.text ?? "unavailable"}\n\nCarry unresolved assumptions and uncertainty forward. Distinguish evidence from confidence. Before saying complete, name exact checks and observed results; if proof is unavailable, say so and escalate.`
       : "";
     return { systemPrompt: `${event.systemPrompt}\n${protocol}${governed}` };
   });
 
-  pi.on("agent_settled", (_event, ctx) => {
+  // Govern model-issued side effects at the tool boundary, not only at prompt entry.
+  pi.on("tool_call", async (event) => {
+    const evaluation = await run(
+      ["eval", "--stdin", "--format", "json"],
+      toolText(event.toolName, event.input),
+    );
+    if (!evaluation.ok || status(evaluation.json) !== "allow")
+      return {
+        block: true,
+        terminate: true,
+        reason: `Decapod blocked ${event.toolName}: ${evaluation.text.slice(0, 300)}`,
+      };
+    if (hasDecisionGate(evaluation.json ?? evaluation.text))
+      return {
+        block: true,
+        terminate: true,
+        reason: `Decapod Decision Gate for ${event.toolName}; human judgment required.`,
+      };
+  });
+
+  pi.on("user_bash", async (event) => {
+    const evaluation = await run(
+      ["eval", "--stdin", "--format", "json"],
+      `User requested shell command:\n${event.command}`,
+    );
+    if (
+      evaluation.ok &&
+      status(evaluation.json) === "allow" &&
+      !hasDecisionGate(evaluation.json ?? evaluation.text)
+    )
+      return;
+    return {
+      result: {
+        output: `🛑 Decapod blocked this shell command.\n${evaluation.text}`,
+        exitCode: 126,
+        cancelled: false,
+        truncated: false,
+      },
+    };
+  });
+
+  pi.on("agent_settled", async (_event, ctx) => {
     if (!originalIntent) return;
-    const resultText = lastAssistantText(ctx);
-    const inference = run([
+    setPhase(ctx, "verifying");
+    const inference = await run([
       "infer",
       "validate",
       "--intent",
       originalIntent,
       "--result",
-      resultText || "(no assistant result)",
+      assistantText(ctx) || "(no assistant result)",
       "--format",
       "json",
     ]);
-    const validation = run(["validate", "--format", "json"]);
-    const proofOk =
+    const validation = await run(["validate", "--format", "json"]);
+    const passed =
       inference.ok &&
       validation.ok &&
       !hasDecisionGate(inference.json ?? inference.text) &&
       !hasDecisionGate(validation.json ?? validation.text);
-    ctx.ui.setWidget("decapod", [
-      proofOk
-        ? "✅ Decapod proof checks passed (evidence available)"
-        : "⚠️ Completion not proven (human review required)",
-      `intent: ${originalIntent.slice(0, 160)}`,
-      "inference validation:",
-      ...display(inference, 6),
-      "repository validation:",
-      ...display(validation, 6),
-    ]);
+    proofState = passed ? "passed" : "unproven";
+    pi.appendEntry("decapod-checkpoint", {
+      intent: originalIntent,
+      profile,
+      proof: proofState,
+      inference: inference.ok,
+      validation: validation.ok,
+    });
+    setPhase(ctx, passed ? "proof available" : "proof required");
+    widget(
+      ctx,
+      passed ? "✅ Decapod proof available" : "⚠️ Completion not proven",
+      [
+        `intent: ${originalIntent.slice(0, 160)}`,
+        "inference validation:",
+        ...display(inference, 5),
+        "repository validation:",
+        ...display(validation, 5),
+      ],
+    );
     ctx.ui.notify(
-      proofOk
-        ? "Evidence-backed verification is available; inspect it before claiming completion."
+      passed
+        ? "Evidence-backed verification is available."
         : "Do not claim completion: proof is missing or a gate remains.",
-      proofOk ? "info" : "warning",
+      passed ? "info" : "warning",
     );
   });
 
-  pi.registerCommand("decapod", {
-    description: "Show Decapod status and the governed workflow",
-    handler: async (_args, ctx) => {
-      const result = run(["session", "status"]);
+  pi.registerShortcut("ctrl+shift+d", {
+    description: "Show Decapod governance status",
+    handler: async (ctx) => {
+      const result = await run(["session", "status"]);
       show(ctx, "🦀 Decapod status", result, [
-        "Next: submit intent · /preflight · /verify · /handoff",
+        `profile: ${profile}`,
+        `proof: ${proofState}`,
+      ]);
+    },
+  });
+  pi.registerShortcut("ctrl+shift+p", {
+    description: "Run Decapod preflight",
+    handler: async (ctx) => {
+      const result = await run([
+        "context",
+        "preflight",
+        "--op",
+        "inference",
+        "--format",
+        "json",
+      ]);
+      show(ctx, "🔭 Decapod preflight", result);
+    },
+  });
+
+  pi.registerCommand("decapod", {
+    description: "Show Decapod status and governed workflow",
+    handler: async (_args, ctx) => {
+      const result = await run(["session", "status"]);
+      show(ctx, "🦀 Decapod status", result, [
+        `profile: ${profile}`,
+        `proof: ${proofState}`,
+        "Ctrl+Shift+D status · Ctrl+Shift+P preflight",
+      ]);
+    },
+  });
+  pi.registerCommand("mode", {
+    description: "Set a personal workflow profile",
+    handler: async (args, ctx) => {
+      const next = args.trim().toLowerCase() || "general";
+      profile = next.slice(0, 32);
+      pi.appendEntry("decapod-checkpoint", {
+        intent: originalIntent,
+        profile,
+        proof: proofState,
+      });
+      setPhase(ctx, "profile set");
+      widget(ctx, `✦ pi profile · ${profile}`, [
+        "The profile is carried into the next governed request.",
+        "Suggested: coding · research · writing · planning · operations",
       ]);
     },
   });
@@ -242,7 +393,7 @@ export default function decapod(pi: ExtensionAPI) {
     handler: async (args, ctx) => {
       const intent =
         args.trim() || originalIntent || "the current user request";
-      const result = run([
+      const result = await run([
         "infer",
         "orientation",
         "--intent",
@@ -268,7 +419,7 @@ export default function decapod(pi: ExtensionAPI) {
   pi.registerCommand("preflight", {
     description: "Ask Decapod what may fail before an operation",
     handler: async (args, ctx) => {
-      const result = run([
+      const result = await run([
         "context",
         "preflight",
         "--op",
@@ -282,7 +433,7 @@ export default function decapod(pi: ExtensionAPI) {
   pi.registerCommand("verify", {
     description: "Run Decapod validation and show its evidence",
     handler: async (_args, ctx) => {
-      const result = run(["validate", "--format", "json"]);
+      const result = await run(["validate", "--format", "json"]);
       show(
         ctx,
         result.ok
@@ -301,10 +452,9 @@ export default function decapod(pi: ExtensionAPI) {
   pi.registerCommand("handoff", {
     description: "Show the Decapod handoff checklist",
     handler: async (_args, ctx) => {
-      ctx.ui.setWidget("decapod", [
-        "📜 Governed handoff checklist",
+      widget(ctx, "📜 Governed handoff", [
         "□ original intent and boundaries (verbatim)",
-        "□ orientation and resolved context",
+        "□ profile, orientation, and resolved context",
         "□ assumptions, uncertainty, and unresolved Decision Gates",
         "□ actions and changed files",
         "□ evidence (exact checks and observed results), not confidence",
