@@ -10,7 +10,7 @@ fi
 
 ln -sfn "${ROOT}/themes/decapod-atelier.json" "${PI_DIR}/themes/decapod-atelier.json"
 ln -sfn "${ROOT}/prompts" "${PI_DIR}/prompts/pi-config-decapod"
-ln -sfn "${ROOT}/extensions/decapod-atelier.ts" "${PI_DIR}/extensions/decapod-atelier.ts"
+ln -sfn "${ROOT}/extensions/decapod.ts" "${PI_DIR}/extensions/decapod.ts"
 
 python3 - "${PI_DIR}/settings.json" "${ROOT}" <<'PY'
 import json, pathlib, sys
@@ -20,7 +20,7 @@ data.update({"theme": "decapod-atelier", "editorPaddingX": 1, "outputPad": 1, "a
 for key, value in {
     "themes": [str(root / "themes")],
     "prompts": [str(root / "prompts")],
-    "extensions": [str(root / "extensions" / "decapod-atelier.ts")],
+    "extensions": [str(root / "extensions" / "decapod.ts")],
 }.items():
     existing = data.get(key, [])
     data[key] = list(dict.fromkeys(existing + value))

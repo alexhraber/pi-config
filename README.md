@@ -1,39 +1,88 @@
-# pi-config
+# pi-config · Decapod Atelier
 
-A Decapod-centered operating system for [pi](https://pi.dev): beautiful, intentional, and proof-aware.
+A Decapod-centered operating system for [pi](https://pi.dev): a calm visual
+workspace where governance is automatic rather than a workflow the user must
+remember.
 
-## Design
+## What is included
 
-- **Intent before action:** every natural-language task passes through `decapod eval`.
-- **Orientation before inference:** use `/orient` to ask Decapod for a governed orientation packet.
-- **Proof before completion:** use `/verify` and `decapod validate` before declaring work done.
-- **Human authority:** a Decision Gate stops the flow rather than guessing.
-- **Low ceremony:** the integration is advisory except for Decapod's explicit prompt-safety block.
+- `themes/decapod-atelier.json` — a dark, high-contrast atelier theme.
+- `prompts/` — `/orient`, `/review`, `/ship`, and `/handoff` prompt templates.
+- `extensions/decapod.ts` — the automatic Decapod governance front door for pi:
+  safety evaluation, orientation, context resolution, Decision Gates,
+  uncertainty custody, and proof-backed settling.
+- `.decapod/` — repository-local governance and living specifications.
+- `install.sh` — an idempotent installer that links the package into pi.
+
+The extension is deliberately thin: pi renders the experience, Decapod owns
+governance state, and the repository remains the durable record. It never
+writes `.decapod` directly and never turns a failed check into proof.
 
 ## Install
 
+Requirements: pi, a working `decapod` executable, and Python 3.
+
 ```bash
+git clone git@github.com:alexhraber/pi-config.git
+cd pi-config
 ./install.sh
 ```
 
-The installer backs up `~/.pi/agent/settings.json`, links this repo's theme, prompts, and extension, and enables the `decapod-atelier` theme. Restart pi or run `/reload`.
+The installer creates `~/.pi/agent/{themes,prompts,extensions}`, backs up an
+existing `settings.json`, links this checkout, and merges only the pi-config
+settings it owns. It refuses to overwrite malformed or non-object JSON.
+Restart pi or run `/reload`, then select `decapod-atelier` if needed.
 
-## Commands
+Because links point at this checkout, `git pull` updates the installed files;
+move the checkout only after rerunning the installer. To remove the package,
+remove the three `pi-config-decapod` / `decapod-atelier` links and revert the
+settings keys using your backup.
 
-- `/decapod` — show Decapod session status and available next steps
-- `/orient [intent]` — get a Decapod orientation packet
-- `/preflight [intent]` — run a preflight check
-- `/verify` — validate the current repository
-- `/handoff` — print a compact handoff checklist
-
-## Suggested rhythm
+## Governed rhythm
 
 ```text
-/refine intent → /orient → work → /preflight → tests → /verify → publish
+natural-language intent
+  → safety evaluation
+  → orientation + resolved context + preflight
+  → governed inference and implementation
+  → evidence-backed settling
+  → honest completion or explicit escalation
 ```
 
-The extension never writes `.decapod` state directly. It only invokes the public CLI.
+The `input` hook automatically evaluates every non-command prompt, obtains an
+orientation packet, resolves Decapod context, and runs preflight before the
+model sees it. It preserves the original request verbatim in a governed packet.
+A safety failure, missing context, or Decision Gate stops the turn; the
+extension never guesses a human decision. At agent settlement it validates both
+the inference result and the repository, and labels missing or failed proof as
+unproven. Confidence is never displayed as evidence.
 
-## Public-repo notes
+Useful explicit affordances remain available: `/decapod` (status), `/orient
+[intent]`, `/preflight [operation]`, `/verify` (validation evidence), and
+`/handoff` (durable custody checklist). `/review` and `/ship` are reusable
+prompt templates, not substitutes for Decapod validation.
 
-This repository contains no credentials, session tokens, or project governance state. It is intended to be forked and adapted. The GitHub remote is deliberately not created automatically; add your own remote when you are ready.
+Prompt safety and Decision Gates are automatic hard stops. The extension uses
+only public Decapod CLI commands and never writes `.decapod` state directly.
+
+## Development and checks
+
+From an isolated Decapod workspace:
+
+```bash
+python3 -m json.tool themes/decapod-atelier.json >/dev/null
+bash -n install.sh
+npx --yes prettier --check extensions/decapod.ts prompts/*.md README.md
+decapod validate
+```
+
+The TypeScript extension is loaded by pi's package metadata and imports
+`ExtensionAPI` from pi; type-check it in a pi development environment. Do not
+run the extension as a standalone Node program.
+
+## Public-repository boundaries
+
+No credentials, session tokens, machine paths, or remote are committed. The
+installer never sends data over the network. Decapod state is accessed through
+its CLI, not by hand-editing `.decapod` files. Forks should adapt their project
+governance/specs before publishing.

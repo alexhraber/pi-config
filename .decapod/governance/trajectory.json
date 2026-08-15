@@ -7,6 +7,8 @@
   "derived_intent": "Strengthen the pi extension and public documentation so intent governance is automatic, visible, uncertainty-preserving, and proof-gated.",
   "current_phase": "implementation",
   "next_transitions": [
+    "run Decapod validation in container",
+    "validate and publish PR",
     "validate then publish PR"
   ],
   "active_boundaries": [
@@ -16,21 +18,53 @@
     "pi-config repository"
   ],
   "inspected_files": [],
-  "modified_files": [],
-  "declared_commands": [],
+  "modified_files": [
+    ".decapod/governance/plan.json",
+    "README.md",
+    "extensions/amnion.ts",
+    "extensions/decapod.ts",
+    "install.sh",
+    "package.json",
+    "prompts"
+  ],
+  "declared_commands": [
+    "bash -n install.sh",
+    "npx prettier --check extensions/amnion.ts prompts/*.md README.md",
+    "python3 -m json.tool package.json"
+  ],
   "tool_calls": [],
-  "checks": [],
-  "evidence": [],
+  "checks": [
+    {
+      "name": "formatting",
+      "status": "passed"
+    },
+    {
+      "name": "json",
+      "status": "passed"
+    },
+    {
+      "name": "rename",
+      "status": "passed"
+    },
+    {
+      "name": "shell",
+      "status": "passed"
+    }
+  ],
+  "evidence": [
+    "Amnion source renamed from decapod-atelier.ts and all package/install references updated",
+    "pi-config owns the full personal pi configuration; Decapod is its native governance extension; Amnion remains independent"
+  ],
   "shortcut_risk_signals": [],
   "unresolved_assumptions": [],
-  "proof_status": "no_checks_run",
+  "proof_status": "passed",
   "verdicts": {
     "intent_alignment": "supported",
     "boundary_discipline": "supported",
     "shortcut_risk": "supported",
-    "completion_proof": "unsupported"
+    "completion_proof": "supported"
   },
-  "artifact_hash": "sha256:3f1fba3ceaaffbf6fc30631d489af7fce75c782b70154567ce025ca831bfe26a",
+  "artifact_hash": "sha256:04577064cc9bce1b3a613b4348215383848988c75e01381e270bea341287d644",
   "custody": {
     "schema_version": "1.0.0",
     "intents": {
@@ -65,11 +99,76 @@
         "event_id": "event:3",
         "intent_id": "intent:pi-config-public-polish-01",
         "kind": "refined"
+      },
+      {
+        "sequence": 4,
+        "event_id": "event:4",
+        "intent_id": "intent:pi-config-public-polish-01",
+        "kind": "trajectory_step_recorded",
+        "detail": "trajectory:pi-config-public-polish-01"
+      },
+      {
+        "sequence": 5,
+        "event_id": "event:5",
+        "intent_id": "intent:pi-config-public-polish-01",
+        "kind": "trajectory_step_recorded",
+        "detail": "trajectory:pi-config-public-polish-01"
       }
     ],
-    "trajectories": {},
+    "trajectories": {
+      "pi-config-public-polish-01": {
+        "id": "pi-config-public-polish-01",
+        "intent_id": "intent:pi-config-public-polish-01",
+        "evidence_only": true,
+        "steps": [
+          {
+            "sequence": 4,
+            "action": "trajectory.record",
+            "command": "npx prettier --check extensions/amnion.ts prompts/*.md README.md",
+            "scope": [
+              "pi-config repository"
+            ],
+            "observations": [
+              "extensions/amnion.ts",
+              "README.md",
+              "install.sh",
+              "package.json",
+              "prompts",
+              "Amnion source renamed from decapod-atelier.ts and all package/install references updated"
+            ],
+            "proof_refs": [
+              "formatting",
+              "json",
+              "shell"
+            ],
+            "validation_findings": [],
+            "custody_event_id": "event:4"
+          },
+          {
+            "sequence": 5,
+            "action": "trajectory.record",
+            "scope": [
+              "pi-config repository"
+            ],
+            "observations": [
+              "extensions/decapod.ts",
+              "README.md",
+              "install.sh",
+              "package.json",
+              ".decapod/governance/plan.json",
+              "pi-config owns the full personal pi configuration; Decapod is its native governance extension; Amnion remains independent"
+            ],
+            "proof_refs": [
+              "rename"
+            ],
+            "validation_findings": [],
+            "custody_event_id": "event:5"
+          }
+        ]
+      }
+    },
     "summaries": {},
     "knowledge_candidates": [],
-    "next_sequence": 3
+    "next_sequence": 5
   }
 }

@@ -1,11 +1,11 @@
 {
-  "name": "pi-config-decapod-atelier",
+  "name": "pi-config-decapod",
   "version": "0.1.0",
   "private": false,
   "description": "A Decapod-centered pi workflow and visual theme",
   "license": "MIT",
   "pi": {
-    "extensions": ["./extensions/decapod-atelier.ts"],
+    "extensions": ["./extensions/decapod.ts"],
     "prompts": ["./prompts"],
     "themes": ["./themes"]
   }

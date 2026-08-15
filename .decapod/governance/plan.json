@@ -7,7 +7,7 @@
     "code_01m03n8eft9536bp"
   ],
   "proof_hooks": [
-    "prettier=prettier --check extensions/decapod-atelier.ts prompts/*.md README.md",
+    "prettier=prettier --check extensions/decapod.ts prompts/*.md README.md",
     "json=python3 -m json.tool themes/decapod-atelier.json",
     "shell=bash -n install.sh",
     "validation=decapod validate"
@@ -24,5 +24,5 @@
     "file_touch_budget": null
   },
   "phases": [],
-  "updated_at": "1786829509Z"
+  "updated_at": "1786829855Z"
 }
