@@ -23,6 +23,18 @@ The runtime is intentionally quiet and event-driven:
 5. Agent settlement invokes inference and repository validation, then persists a compact pi session checkpoint through pi's session API.
 6. The UI exposes only the current phase, profile, Decision Gate, or proof state.
 
+### Visual productivity system
+
+The Atelier theme uses a high-contrast slate surface with gold intent accents,
+cyan tool focus, green proof, and red escalation. The extension mirrors that
+hierarchy with a compact footer tuple (`phase · profile · proof`) and a framed
+widget that expands only for the next useful action, gate, or evidence. This
+keeps long sessions visually calm while making consequential state immediately
+legible.
+
+The layout is keyboard-first: status and preflight are available without
+remembering a command, while routine governance remains peripheral.
+
 The extension must not become a second governance kernel, block pi's event loop,
 or directly mutate `.decapod` state. Profiles are presentation/context hints,
 not policy bypasses.
@@ -177,7 +189,7 @@ sequenceDiagram
 
 ## Codebase Attestation
 
-- Repository signal fingerprint: `83dddd873634d93dcc4ee8220c1c4948cd2267e2e16058c38bd476b8ab547a49`
+- Repository signal fingerprint: `3d82ad382e2c4411250a1484e67e9a5cd5b1398fa9876f17d5e455bd9a032108`
 - Significant implementation surfaces: `.github/` (1 files), `README.md/` (1 files), `package.json/` (1 files)
 - Refreshed from the current codebase by `decapod specs.refresh`
 <!-- decapod:codebase-attestation:end -->
