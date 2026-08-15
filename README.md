@@ -1,5 +1,7 @@
 # pi-config · Decapod Atelier
 
+[![🦀 Decapod](https://img.shields.io/badge/🦀%20Decapod-v0.99.4-dc2626)](https://github.com/DecapodLabs/decapod)
+
 A Decapod-centered operating system for [pi](https://pi.dev): a calm visual
 workspace where governance is automatic rather than a workflow the user must
 remember.
