@@ -1,11 +1,11 @@
 # Architecture
 
 ## Direction
-A thin pi extension uses public Decapod interfaces; Decapod owns governance state and proof
+Composable repository architecture with explicit boundaries and proof-backed delivery invariants.
 
 ## What This Project Is
-pi-config is a application project built using TypeScript.
-A thin pi extension uses public Decapod interfaces; Decapod owns governance state and proof
+agent-unknown-code-01m03n8eft9536bp-01m03n8r is a service_or_library project built using shell, typescript, typescript/javascript.
+Composable repository architecture with explicit boundaries and proof-backed delivery invariants.
 
 Architectural principles:
 - **Simplicity**: Keep components focused and reusable.
@@ -13,9 +13,9 @@ Architectural principles:
 - **Reliability**: Graceful failure handling and thorough verification.
 
 ## Current Facts
-- Runtime/languages: TypeScript
-- Detected surfaces/framework hints: cli, pi
-- Product type: application
+- Runtime/languages: shell, typescript, typescript/javascript
+- Detected surfaces/framework hints: npm, shell, typescript
+- Product type: service_or_library
 
 ## Architecture Map
 This project's architecture consists of the following key layers/directories:
@@ -32,7 +32,7 @@ This project's architecture consists of the following key layers/directories:
 
 ## Topology
 ```text
-Client -> API Gateway -> Service Core -> Worker Queue -> Datastores
+Host Application -> Library API -> Domain Core -> Adapters (Store / Network)
 ```
 
 ## Store Boundaries
@@ -153,3 +153,11 @@ sequenceDiagram
 - Migration and rollback treatment MUST match the selected storage technology
 <!-- decapod:capability-overlay:persistent-state:end -->
 
+<!-- decapod:codebase-attestation:start -->
+
+## Codebase Attestation
+
+- Repository signal fingerprint: `e1f1ee5d0faff83a813c779ca0d3a8fba03fcfd3b4d3735c6e3bc73cf3088f30`
+- Significant implementation surfaces: `.github/` (1 files), `README.md/` (1 files), `package.json/` (1 files)
+- Refreshed from the current codebase by `decapod specs.refresh`
+<!-- decapod:codebase-attestation:end -->

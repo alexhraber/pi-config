@@ -1,3 +1,15 @@
 *.local.json
 .env
 .DS_Store
+.decapod/data
+.decapod/data/*
+.decapod/.stfolder
+.decapod/workspaces
+.decapod/managed/*
+.decapod/governance/workunits/
+!.decapod/data/
+!.decapod/managed/
+!.decapod/managed/Dockerfile.decapod
+!.decapod/managed/specs/
+!.decapod/managed/specs/*.md
+!.decapod/managed/specs/.manifest.json

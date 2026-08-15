@@ -11,30 +11,30 @@
 <!-- decapod:declared-capabilities:end -->
 
 ## Product Outcome
-- A Decapod-centered pi agent workflow with automatic intent governance and proof-gated completion
+- A Decapod-centered operating system for [pi](https://pi.dev): beautiful, intentional, and proof-aware.
 
 ## What This Project Is
-pi-config is a application project built using TypeScript.
-A Decapod-centered pi agent workflow with automatic intent governance and proof-gated completion
+agent-unknown-code-01m03n8eft9536bp-01m03n8r is a service_or_library project built using shell, typescript, typescript/javascript.
+A Decapod-centered operating system for [pi](https://pi.dev): beautiful, intentional, and proof-aware.
 
 Key operating facts:
-- **Primary languages**: TypeScript
-- **Detected surfaces**: cli, pi
+- **Primary languages**: shell, typescript, typescript/javascript
+- **Detected surfaces**: npm, shell, typescript
 
 ## Product View
 ```mermaid
 flowchart LR
-  U[Primary User] --> P[pi-config]
+  U[Primary User] --> P[agent-unknown-code-01m03n8eft9536bp-01m03n8r]
   P --> O[User-visible Outcome]
   P --> G[Proof Gates]
   G --> E[Evidence Artifacts]
 ```
 
 ## Inferred Baseline
-- Repository: pi-config
-- Product type: application
-- Primary languages: TypeScript
-- Detected surfaces: cli, pi
+- Repository: agent-unknown-code-01m03n8eft9536bp-01m03n8r
+- Product type: service_or_library
+- Primary languages: shell, typescript, typescript/javascript
+- Detected surfaces: npm, shell, typescript
 
 ## Scope
 | Area | In Scope | Proof Surface |
@@ -56,7 +56,7 @@ flowchart LR
 - Security/compliance: sensitive data handling and authz are mandatory.
 
 ## Acceptance Criteria (must be objectively testable)
-- [ ] Automatic intent governance and passing Decapod validation before publication
+- [ ] Decapod validate passes, required tests pass, and promotion-relevant artifacts are present.
 - [ ] Non-functional targets are met (latency, reliability, cost, etc.).
 - [ ] Validation gates pass and artifacts are attached.
 - [ ] `npm test` (or `pnpm test`) passes for unit/integration suites
@@ -129,3 +129,12 @@ flowchart LR
 |---|---|---|---|
 | Which interfaces are versioned at launch? | TBD | YYYY-MM-DD | |
 | Which non-functional target is hardest to hit? | TBD | YYYY-MM-DD | |
+
+<!-- decapod:codebase-attestation:start -->
+
+## Codebase Attestation
+
+- Repository signal fingerprint: `e1f1ee5d0faff83a813c779ca0d3a8fba03fcfd3b4d3735c6e3bc73cf3088f30`
+- Significant implementation surfaces: `.github/` (1 files), `README.md/` (1 files), `package.json/` (1 files)
+- Refreshed from the current codebase by `decapod specs.refresh`
+<!-- decapod:codebase-attestation:end -->

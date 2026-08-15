@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "title": "Public-ready automatic Decapod pi configuration",
+  "intent": "Make pi-config an ultra-beautiful, highly custom, automatic Decapod-centered first-class pi configuration and publish a proof-backed PR.",
+  "state": "APPROVED",
+  "todo_ids": [
+    "code_01m03n8eft9536bp"
+  ],
+  "proof_hooks": [
+    "prettier=prettier --check extensions/decapod-atelier.ts prompts/*.md README.md",
+    "json=python3 -m json.tool themes/decapod-atelier.json",
+    "shell=bash -n install.sh",
+    "validation=decapod validate"
+  ],
+  "unknowns": [],
+  "human_questions": [],
+  "stop_conditions": [],
+  "unresolved_contradictions": [],
+  "deferred_questions": [],
+  "constraints": {
+    "forbidden_paths": [
+      ".decapod/data"
+    ],
+    "file_touch_budget": null
+  },
+  "phases": [],
+  "updated_at": "1786829509Z"
+}

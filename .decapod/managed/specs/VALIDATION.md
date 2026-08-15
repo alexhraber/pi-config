@@ -155,3 +155,11 @@ flowchart LR
 - Data integrity validation after recovery
 <!-- decapod:capability-overlay:persistent-state:end -->
 
+<!-- decapod:codebase-attestation:start -->
+
+## Codebase Attestation
+
+- Repository signal fingerprint: `e1f1ee5d0faff83a813c779ca0d3a8fba03fcfd3b4d3735c6e3bc73cf3088f30`
+- Significant implementation surfaces: `.github/` (1 files), `README.md/` (1 files), `package.json/` (1 files)
+- Refreshed from the current codebase by `decapod specs.refresh`
+<!-- decapod:codebase-attestation:end -->

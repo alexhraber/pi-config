@@ -4,10 +4,10 @@ Canonical path: `.decapod/managed/specs/`.
 These files are the project-local contract for humans and agents.
 
 ## Snapshot
-- Project: pi-config
-- Outcome: A Decapod-centered pi agent workflow with automatic intent governance and proof-gated completion
-- Detected languages: TypeScript
-- Detected surfaces: cli, pi
+- Project: agent-unknown-code-01m03n8eft9536bp-01m03n8r
+- Outcome: A Decapod-centered operating system for [pi](https://pi.dev): beautiful, intentional, and proof-aware.
+- Detected languages: shell, typescript, typescript/javascript
+- Detected surfaces: npm, shell, typescript
 
 ## How to use this folder
 - [INTENT.md](./INTENT.md): what success means and what is explicitly out of scope.
@@ -60,3 +60,12 @@ These files are the project-local contract for humans and agents.
 - [ ] Define threat model and auth/authz decisions in [SECURITY.md](./SECURITY.md).
 - [ ] Ensure architecture diagram, docs, changelog, and tests are mapped to promotion gates.
 - [ ] Run all validation/test commands and attach evidence artifacts.
+
+<!-- decapod:codebase-attestation:start -->
+
+## Codebase Attestation
+
+- Repository signal fingerprint: `e1f1ee5d0faff83a813c779ca0d3a8fba03fcfd3b4d3735c6e3bc73cf3088f30`
+- Significant implementation surfaces: `.github/` (1 files), `README.md/` (1 files), `package.json/` (1 files)
+- Refreshed from the current codebase by `decapod specs.refresh`
+<!-- decapod:codebase-attestation:end -->

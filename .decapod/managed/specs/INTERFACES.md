@@ -31,14 +31,14 @@ Generated interface specs should include:
 - API / RPC entrypoints:
 - CLI surfaces:
 - Event/webhook consumers:
-- Repository-detected surfaces: cli, pi
+- Repository-detected surfaces: npm, shell, typescript
 
 ## Data Ownership
 - Source-of-truth tables/collections:
 - Cross-boundary read models:
 - Consistency expectations:
 
-## Error Taxonomy Example (application)
+## Error Taxonomy Example (service_or_library)
 ```ts
 export enum ApiErrorCode {
   Validation = "validation_failed",
@@ -95,3 +95,12 @@ export enum ApiErrorCode {
 - [ ] Consumers can distinguish validation, authorization, conflict,
   dependency, and internal failures.
 - [ ] Backward compatibility or migration instructions are published.
+
+<!-- decapod:codebase-attestation:start -->
+
+## Codebase Attestation
+
+- Repository signal fingerprint: `e1f1ee5d0faff83a813c779ca0d3a8fba03fcfd3b4d3735c6e3bc73cf3088f30`
+- Significant implementation surfaces: `.github/` (1 files), `README.md/` (1 files), `package.json/` (1 files)
+- Refreshed from the current codebase by `decapod specs.refresh`
+<!-- decapod:codebase-attestation:end -->

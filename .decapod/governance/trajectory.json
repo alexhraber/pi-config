@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.1.0",
+  "run_id": "pi-config-public-polish-01",
+  "intent_id": "intent:pi-config-public-polish-01",
+  "task_id": "code_01m03n8eft9536bp",
+  "original_intent": "Make pi-config an ultra-beautiful, highly custom, automatic Decapod-centered first-class pi configuration and publish a proof-backed PR.",
+  "derived_intent": "Strengthen the pi extension and public documentation so intent governance is automatic, visible, uncertainty-preserving, and proof-gated.",
+  "current_phase": "implementation",
+  "next_transitions": [
+    "validate then publish PR"
+  ],
+  "active_boundaries": [
+    "Only pi-config source, prompts, theme, installer, README, and governed specs; no direct .decapod data mutation."
+  ],
+  "repo_scope": [
+    "pi-config repository"
+  ],
+  "inspected_files": [],
+  "modified_files": [],
+  "declared_commands": [],
+  "tool_calls": [],
+  "checks": [],
+  "evidence": [],
+  "shortcut_risk_signals": [],
+  "unresolved_assumptions": [],
+  "proof_status": "no_checks_run",
+  "verdicts": {
+    "intent_alignment": "supported",
+    "boundary_discipline": "supported",
+    "shortcut_risk": "supported",
+    "completion_proof": "unsupported"
+  },
+  "artifact_hash": "sha256:3f1fba3ceaaffbf6fc30631d489af7fce75c782b70154567ce025ca831bfe26a",
+  "custody": {
+    "schema_version": "1.0.0",
+    "intents": {
+      "intent:pi-config-public-polish-01": {
+        "id": "intent:pi-config-public-polish-01",
+        "raw_intent": "Make pi-config an ultra-beautiful, highly custom, automatic Decapod-centered first-class pi configuration and publish a proof-backed PR.",
+        "refined_intent": "Strengthen the pi extension and public documentation so intent governance is automatic, visible, uncertainty-preserving, and proof-gated.",
+        "acceptance_criteria": [],
+        "constraints": [
+          "pi-config repository"
+        ],
+        "assumptions": [],
+        "boundaries": [
+          "Only pi-config source, prompts, theme, installer, README, and governed specs; no direct .decapod data mutation."
+        ],
+        "out_of_scope": [],
+        "proof_requirements": [],
+        "status": "refined",
+        "created_sequence": 1,
+        "updated_sequence": 3
+      }
+    },
+    "events": [
+      {
+        "sequence": 2,
+        "event_id": "event:2",
+        "intent_id": "intent:pi-config-public-polish-01",
+        "kind": "created"
+      },
+      {
+        "sequence": 3,
+        "event_id": "event:3",
+        "intent_id": "intent:pi-config-public-polish-01",
+        "kind": "refined"
+      }
+    ],
+    "trajectories": {},
+    "summaries": {},
+    "knowledge_candidates": [],
+    "next_sequence": 3
+  }
+}
