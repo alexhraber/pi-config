@@ -18,6 +18,12 @@ The extension is deliberately thin: pi renders the experience, Decapod owns
 governance state, and the repository remains the durable record. It never
 writes `.decapod` directly and never turns a failed check into proof.
 
+The visual system is intentionally information-dense without being loud: the
+footer carries a compact phase/profile/proof tuple, while the framed Decapod
+widget shows the next useful action, gate, or evidence. Routine governance
+stays in the periphery; human attention is reserved for uncertainty and
+Decision Gates.
+
 ## Install
 
 Requirements: pi, a working `decapod` executable, and Python 3.
