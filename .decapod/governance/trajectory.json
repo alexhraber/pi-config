@@ -8,6 +8,7 @@
   "current_phase": "implementation",
   "next_transitions": [
     "container validation",
+    "publish pull request",
     "run Decapod validation in container",
     "validate and publish PR",
     "validate then publish PR"
@@ -56,11 +57,16 @@
     {
       "name": "syntax",
       "status": "passed"
+    },
+    {
+      "name": "tool-governance",
+      "status": "passed"
     }
   ],
   "evidence": [
     "Amnion source renamed from decapod-atelier.ts and all package/install references updated",
     "Async Decapod execution, tool and shell governance, session checkpoints, profiles, shortcuts, and proof-aware settlement implemented",
+    "Enhancement pass adds async calls, tool and shell gates, session checkpoints, profiles, shortcuts, and polished status UI.",
     "pi-config owns the full personal pi configuration; Decapod is its native governance extension; Amnion remains independent"
   ],
   "shortcut_risk_signals": [],
@@ -72,7 +78,7 @@
     "shortcut_risk": "supported",
     "completion_proof": "supported"
   },
-  "artifact_hash": "sha256:1268f348197f2024e0e783a7d241c299fd216594d966944e54a79c8ed2b2457f",
+  "artifact_hash": "sha256:6f0145c6f4c27b4303668b6ad8ea1bb0dbb9d88a72109f18c7d42c66145c59fb",
   "custody": {
     "schema_version": "1.0.0",
     "intents": {
@@ -125,6 +131,13 @@
       {
         "sequence": 6,
         "event_id": "event:6",
+        "intent_id": "intent:pi-config-public-polish-01",
+        "kind": "trajectory_step_recorded",
+        "detail": "trajectory:pi-config-public-polish-01"
+      },
+      {
+        "sequence": 7,
+        "event_id": "event:7",
         "intent_id": "intent:pi-config-public-polish-01",
         "kind": "trajectory_step_recorded",
         "detail": "trajectory:pi-config-public-polish-01"
@@ -198,12 +211,29 @@
             ],
             "validation_findings": [],
             "custody_event_id": "event:6"
+          },
+          {
+            "sequence": 7,
+            "action": "trajectory.record",
+            "scope": [
+              "pi-config repository"
+            ],
+            "observations": [
+              "extensions/decapod.ts",
+              "README.md",
+              "Enhancement pass adds async calls, tool and shell gates, session checkpoints, profiles, shortcuts, and polished status UI."
+            ],
+            "proof_refs": [
+              "tool-governance"
+            ],
+            "validation_findings": [],
+            "custody_event_id": "event:7"
           }
         ]
       }
     },
     "summaries": {},
     "knowledge_candidates": [],
-    "next_sequence": 6
+    "next_sequence": 7
   }
 }
