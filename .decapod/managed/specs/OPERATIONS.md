@@ -146,7 +146,7 @@ Use structured logging (pino/winston) with request_id, actor, latency_ms, and er
 
 ## Codebase Attestation
 
-- Repository signal fingerprint: `e1f1ee5d0faff83a813c779ca0d3a8fba03fcfd3b4d3735c6e3bc73cf3088f30`
+- Repository signal fingerprint: `9e64570421f244e715e44edb937989d319ea3617ea1eb16f49722db75e9d61e8`
 - Significant implementation surfaces: `.github/` (1 files), `README.md/` (1 files), `package.json/` (1 files)
 - Refreshed from the current codebase by `decapod specs.refresh`
 <!-- decapod:codebase-attestation:end -->
