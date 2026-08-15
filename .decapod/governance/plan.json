@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "title": "Public-ready automatic Decapod pi configuration",
-  "intent": "Make pi-config an ultra-beautiful, highly custom, automatic Decapod-centered first-class pi configuration and publish a proof-backed PR.",
+  "title": "Sleek personal pi runtime with automatic Decapod governance",
+  "intent": "Make pi-config an ultra-beautiful personal pi configuration with quiet automatic Decapod governance across intent, tools, sessions, and proof.",
   "state": "APPROVED",
   "todo_ids": [
     "code_01m03n8eft9536bp"
@@ -24,5 +24,5 @@
     "file_touch_budget": null
   },
   "phases": [],
-  "updated_at": "1786829855Z"
+  "updated_at": "1786830386Z"
 }

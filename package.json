@@ -1,12 +1,18 @@
 {
   "name": "pi-config-decapod",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": false,
-  "description": "A Decapod-centered pi workflow and visual theme",
+  "description": "A sleek personal pi configuration with automatic Decapod governance",
   "license": "MIT",
   "pi": {
-    "extensions": ["./extensions/decapod.ts"],
-    "prompts": ["./prompts"],
-    "themes": ["./themes"]
+    "extensions": [
+      "./extensions/decapod.ts"
+    ],
+    "prompts": [
+      "./prompts"
+    ],
+    "themes": [
+      "./themes"
+    ]
   }
 }

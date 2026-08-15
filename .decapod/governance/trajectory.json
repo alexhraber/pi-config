@@ -7,6 +7,8 @@
   "derived_intent": "Strengthen the pi extension and public documentation so intent governance is automatic, visible, uncertainty-preserving, and proof-gated.",
   "current_phase": "implementation",
   "next_transitions": [
+    "container validation",
+    "publish pull request",
     "run Decapod validation in container",
     "validate and publish PR",
     "validate then publish PR"
@@ -29,7 +31,9 @@
   ],
   "declared_commands": [
     "bash -n install.sh",
+    "npx esbuild extensions/decapod.ts --bundle --format=esm --platform=node --external:@earendil-works/pi-coding-agent",
     "npx prettier --check extensions/amnion.ts prompts/*.md README.md",
+    "npx prettier --check extensions/decapod.ts README.md package.json prompts/*.md",
     "python3 -m json.tool package.json"
   ],
   "tool_calls": [],
@@ -49,10 +53,20 @@
     {
       "name": "shell",
       "status": "passed"
+    },
+    {
+      "name": "syntax",
+      "status": "passed"
+    },
+    {
+      "name": "tool-governance",
+      "status": "passed"
     }
   ],
   "evidence": [
     "Amnion source renamed from decapod-atelier.ts and all package/install references updated",
+    "Async Decapod execution, tool and shell governance, session checkpoints, profiles, shortcuts, and proof-aware settlement implemented",
+    "Enhancement pass adds async calls, tool and shell gates, session checkpoints, profiles, shortcuts, and polished status UI.",
     "pi-config owns the full personal pi configuration; Decapod is its native governance extension; Amnion remains independent"
   ],
   "shortcut_risk_signals": [],
@@ -64,7 +78,7 @@
     "shortcut_risk": "supported",
     "completion_proof": "supported"
   },
-  "artifact_hash": "sha256:04577064cc9bce1b3a613b4348215383848988c75e01381e270bea341287d644",
+  "artifact_hash": "sha256:6f0145c6f4c27b4303668b6ad8ea1bb0dbb9d88a72109f18c7d42c66145c59fb",
   "custody": {
     "schema_version": "1.0.0",
     "intents": {
@@ -110,6 +124,20 @@
       {
         "sequence": 5,
         "event_id": "event:5",
+        "intent_id": "intent:pi-config-public-polish-01",
+        "kind": "trajectory_step_recorded",
+        "detail": "trajectory:pi-config-public-polish-01"
+      },
+      {
+        "sequence": 6,
+        "event_id": "event:6",
+        "intent_id": "intent:pi-config-public-polish-01",
+        "kind": "trajectory_step_recorded",
+        "detail": "trajectory:pi-config-public-polish-01"
+      },
+      {
+        "sequence": 7,
+        "event_id": "event:7",
         "intent_id": "intent:pi-config-public-polish-01",
         "kind": "trajectory_step_recorded",
         "detail": "trajectory:pi-config-public-polish-01"
@@ -163,12 +191,49 @@
             ],
             "validation_findings": [],
             "custody_event_id": "event:5"
+          },
+          {
+            "sequence": 6,
+            "action": "trajectory.record",
+            "command": "npx prettier --check extensions/decapod.ts README.md package.json prompts/*.md",
+            "scope": [
+              "pi-config repository"
+            ],
+            "observations": [
+              "extensions/decapod.ts",
+              "README.md",
+              "package.json",
+              "Async Decapod execution, tool and shell governance, session checkpoints, profiles, shortcuts, and proof-aware settlement implemented"
+            ],
+            "proof_refs": [
+              "formatting",
+              "syntax"
+            ],
+            "validation_findings": [],
+            "custody_event_id": "event:6"
+          },
+          {
+            "sequence": 7,
+            "action": "trajectory.record",
+            "scope": [
+              "pi-config repository"
+            ],
+            "observations": [
+              "extensions/decapod.ts",
+              "README.md",
+              "Enhancement pass adds async calls, tool and shell gates, session checkpoints, profiles, shortcuts, and polished status UI."
+            ],
+            "proof_refs": [
+              "tool-governance"
+            ],
+            "validation_findings": [],
+            "custody_event_id": "event:7"
           }
         ]
       }
     },
     "summaries": {},
     "knowledge_candidates": [],
-    "next_sequence": 5
+    "next_sequence": 7
   }
 }

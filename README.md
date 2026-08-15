@@ -53,14 +53,19 @@ The `input` hook automatically evaluates every non-command prompt, obtains an
 orientation packet, resolves Decapod context, and runs preflight before the
 model sees it. It preserves the original request verbatim in a governed packet.
 A safety failure, missing context, or Decision Gate stops the turn; the
-extension never guesses a human decision. At agent settlement it validates both
-the inference result and the repository, and labels missing or failed proof as
-unproven. Confidence is never displayed as evidence.
+extension never guesses a human decision. The extension also governs model
+side effects at the `tool_call` boundary and user shell commands, so safety is
+not only a prompt-entry concern. At agent settlement it validates both the
+inference result and the repository, persists a compact session checkpoint,
+and labels missing or failed proof as unproven. Confidence is never displayed
+as evidence.
 
-Useful explicit affordances remain available: `/decapod` (status), `/orient
+Useful explicit affordances remain available: `/decapod` (status), `/mode
+[profile]` (coding, research, writing, planning, or operations), `/orient
 [intent]`, `/preflight [operation]`, `/verify` (validation evidence), and
-`/handoff` (durable custody checklist). `/review` and `/ship` are reusable
-prompt templates, not substitutes for Decapod validation.
+`/handoff` (durable custody checklist). `Ctrl+Shift+D` opens status and
+`Ctrl+Shift+P` runs preflight. `/review` and `/ship` are reusable prompt
+templates, not substitutes for Decapod validation.
 
 Prompt safety and Decision Gates are automatic hard stops. The extension uses
 only public Decapod CLI commands and never writes `.decapod` state directly.
@@ -77,8 +82,9 @@ decapod validate
 ```
 
 The TypeScript extension is loaded by pi's package metadata and imports
-`ExtensionAPI` from pi; type-check it in a pi development environment. Do not
-run the extension as a standalone Node program.
+`ExtensionAPI` from pi; type-check it in a pi development environment. It uses
+non-blocking Decapod subprocess calls so the UI remains responsive. Do not run
+the extension as a standalone Node program.
 
 ## Public-repository boundaries
 
