@@ -100,7 +100,7 @@ export enum ApiErrorCode {
 
 ## Codebase Attestation
 
-- Repository signal fingerprint: `3d82ad382e2c4411250a1484e67e9a5cd5b1398fa9876f17d5e455bd9a032108`
+- Repository signal fingerprint: `2d8bc2faa5f87438c12e86db4c94b024e926a881e45594481e3a93b5d3f11032`
 - Significant implementation surfaces: `.github/` (1 files), `README.md/` (1 files), `package.json/` (1 files)
 - Refreshed from the current codebase by `decapod specs.refresh`
 <!-- decapod:codebase-attestation:end -->

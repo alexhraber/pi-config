@@ -1,31 +1,31 @@
 {
   "schema_version": "1.1.0",
-  "run_id": "pi-atelier-ux-01",
-  "intent_id": "intent:pi-atelier-ux-01",
-  "task_id": "fend_01m03pfaa3w1k37x",
-  "original_intent": "Refine the personal pi configuration layout, color system, and governance status UI for high information density, calm attention, and productive long sessions.",
-  "derived_intent": "Polish the theme and make governance status legible, compact, and visually hierarchical.",
-  "current_phase": "visual refinement",
+  "run_id": "pi-global-reload-01",
+  "intent_id": "intent:pi-global-reload-01",
+  "task_id": "code_01m03px03jwrh7e5",
+  "original_intent": "Install pi-config globally and automatically reload the running pi resources after explicit git pulls change the configuration.",
+  "derived_intent": "Watch the installed checkout, debounce relevant file changes, and queue a safe pi reload after the active turn settles.",
+  "current_phase": "implementation",
   "next_transitions": [
-    "run validation then publish PR",
+    "push and CI validate",
     "validate and publish PR"
   ],
   "active_boundaries": [
-    "Theme, extension UI, README; preserve Decapod authority and public CLI boundary."
+    "Global installer, extension watcher, documentation, and governed specs; no automatic git network updates."
   ],
   "repo_scope": [
     "pi-config repository"
   ],
   "inspected_files": [],
   "modified_files": [
+    ".decapod/managed/specs/ARCHITECTURE.md",
     "README.md",
     "extensions/decapod.ts",
-    "themes/decapod-atelier.json"
+    "install.sh"
   ],
   "declared_commands": [
     "npx esbuild extensions/decapod.ts --bundle --format=esm --platform=node --external:@earendil-works/pi-coding-agent",
-    "npx prettier --check extensions/decapod.ts themes/decapod-atelier.json README.md prompts/*.md",
-    "python3 -m json.tool themes/decapod-atelier.json"
+    "npx prettier --check extensions/decapod.ts README.md package.json prompts/*.md themes/decapod-atelier.json"
   ],
   "tool_calls": [],
   "checks": [
@@ -34,16 +34,12 @@
       "status": "passed"
     },
     {
-      "name": "json",
-      "status": "passed"
-    },
-    {
       "name": "syntax",
       "status": "passed"
     }
   ],
   "evidence": [
-    "High-contrast slate/gold palette, framed status hierarchy, compact phase/profile/proof footer, and clearer keyboard-first widget guidance."
+    "Global symlinks plus session-scoped debounced watchers queue reload after explicit pulls; no automatic network update."
   ],
   "shortcut_risk_signals": [],
   "unresolved_assumptions": [],
@@ -54,21 +50,21 @@
     "shortcut_risk": "supported",
     "completion_proof": "supported"
   },
-  "artifact_hash": "sha256:7e46d33d63bfbec61853479ac3b908d483d5269a417ddb3d9879e2e00fbebf27",
+  "artifact_hash": "sha256:9427aaee06976d5354f5dd273c2da3f06541aaea32f6fb71ca2d731b2d84ed81",
   "custody": {
     "schema_version": "1.0.0",
     "intents": {
-      "intent:pi-atelier-ux-01": {
-        "id": "intent:pi-atelier-ux-01",
-        "raw_intent": "Refine the personal pi configuration layout, color system, and governance status UI for high information density, calm attention, and productive long sessions.",
-        "refined_intent": "Polish the theme and make governance status legible, compact, and visually hierarchical.",
+      "intent:pi-global-reload-01": {
+        "id": "intent:pi-global-reload-01",
+        "raw_intent": "Install pi-config globally and automatically reload the running pi resources after explicit git pulls change the configuration.",
+        "refined_intent": "Watch the installed checkout, debounce relevant file changes, and queue a safe pi reload after the active turn settles.",
         "acceptance_criteria": [],
         "constraints": [
           "pi-config repository"
         ],
         "assumptions": [],
         "boundaries": [
-          "Theme, extension UI, README; preserve Decapod authority and public CLI boundary."
+          "Global installer, extension watcher, documentation, and governed specs; no automatic git network updates."
         ],
         "out_of_scope": [],
         "proof_requirements": [],
@@ -81,45 +77,45 @@
       {
         "sequence": 2,
         "event_id": "event:2",
-        "intent_id": "intent:pi-atelier-ux-01",
+        "intent_id": "intent:pi-global-reload-01",
         "kind": "created"
       },
       {
         "sequence": 3,
         "event_id": "event:3",
-        "intent_id": "intent:pi-atelier-ux-01",
+        "intent_id": "intent:pi-global-reload-01",
         "kind": "refined"
       },
       {
         "sequence": 4,
         "event_id": "event:4",
-        "intent_id": "intent:pi-atelier-ux-01",
+        "intent_id": "intent:pi-global-reload-01",
         "kind": "trajectory_step_recorded",
-        "detail": "trajectory:pi-atelier-ux-01"
+        "detail": "trajectory:pi-global-reload-01"
       }
     ],
     "trajectories": {
-      "pi-atelier-ux-01": {
-        "id": "pi-atelier-ux-01",
-        "intent_id": "intent:pi-atelier-ux-01",
+      "pi-global-reload-01": {
+        "id": "pi-global-reload-01",
+        "intent_id": "intent:pi-global-reload-01",
         "evidence_only": true,
         "steps": [
           {
             "sequence": 4,
             "action": "trajectory.record",
-            "command": "npx prettier --check extensions/decapod.ts themes/decapod-atelier.json README.md prompts/*.md",
+            "command": "npx prettier --check extensions/decapod.ts README.md package.json prompts/*.md themes/decapod-atelier.json",
             "scope": [
               "pi-config repository"
             ],
             "observations": [
-              "themes/decapod-atelier.json",
               "extensions/decapod.ts",
+              "install.sh",
               "README.md",
-              "High-contrast slate/gold palette, framed status hierarchy, compact phase/profile/proof footer, and clearer keyboard-first widget guidance."
+              ".decapod/managed/specs/ARCHITECTURE.md",
+              "Global symlinks plus session-scoped debounced watchers queue reload after explicit pulls; no automatic network update."
             ],
             "proof_refs": [
               "format",
-              "json",
               "syntax"
             ],
             "validation_findings": [],

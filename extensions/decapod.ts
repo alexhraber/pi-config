@@ -1,5 +1,7 @@
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { execFile } from "node:child_process";
+import { watch, type FSWatcher } from "node:fs";
+import { dirname, fileURLToPath, join } from "node:path";
 import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
@@ -134,6 +136,16 @@ export default function decapod(pi: ExtensionAPI) {
   let orientation: Result | undefined;
   let profile = "general";
   let proofState = "not-run";
+  let reloadTimer: ReturnType<typeof setTimeout> | undefined;
+  let reloadQueued = false;
+  let watchers: FSWatcher[] = [];
+
+  const closeWatchers = () => {
+    for (const watcher of watchers) watcher.close();
+    watchers = [];
+    if (reloadTimer) clearTimeout(reloadTimer);
+    reloadTimer = undefined;
+  };
 
   const widget = (ctx: UiContext, title: string, lines: string[] = []) => {
     const body = lines.length
@@ -172,6 +184,52 @@ export default function decapod(pi: ExtensionAPI) {
       "Ctrl+Shift+D  status   ·   Ctrl+Shift+P  preflight",
       "type naturally · evidence appears when it matters",
     ]);
+
+    if (process.env.PI_CONFIG_AUTO_RELOAD === "0") return;
+    const packageRoot =
+      process.env.PI_CONFIG_ROOT ??
+      dirname(dirname(fileURLToPath(import.meta.url)));
+    const watched = [
+      { path: join(packageRoot, "extensions"), names: new Set(["decapod.ts"]) },
+      {
+        path: join(packageRoot, "themes"),
+        names: new Set(["decapod-atelier.json"]),
+      },
+      { path: join(packageRoot, "prompts"), names: undefined },
+      {
+        path: packageRoot,
+        names: new Set(["README.md", "package.json", "install.sh"]),
+      },
+    ];
+    const queueReload = () => {
+      if (reloadQueued || reloadTimer) return;
+      reloadTimer = setTimeout(() => {
+        reloadTimer = undefined;
+        reloadQueued = true;
+        closeWatchers();
+        widget(ctx, "↻ pi-config updated", [
+          "new configuration detected",
+          "reloading after the current turn settles",
+        ]);
+        pi.sendUserMessage("/decapod-reload", { deliverAs: "followUp" });
+      }, 500);
+    };
+    for (const entry of watched) {
+      try {
+        watchers.push(
+          watch(entry.path, (_event, filename) => {
+            const name = filename?.toString();
+            if (!name || !entry.names || entry.names.has(name)) queueReload();
+          }),
+        );
+      } catch {
+        // A missing optional resource directory should not prevent pi startup.
+      }
+    }
+  });
+
+  pi.on("session_shutdown", () => {
+    closeWatchers();
   });
 
   pi.on("input", async (event, ctx) => {
@@ -338,6 +396,14 @@ export default function decapod(pi: ExtensionAPI) {
         : "Do not claim completion: proof is missing or a gate remains.",
       passed ? "info" : "warning",
     );
+  });
+
+  pi.registerCommand("decapod-reload", {
+    description: "Reload pi-config after a pulled configuration change",
+    handler: async (_args, ctx) => {
+      closeWatchers();
+      await ctx.reload();
+    },
   });
 
   pi.registerShortcut("ctrl+shift+d", {
