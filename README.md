@@ -39,12 +39,22 @@ cd pi-config
 The installer creates `~/.pi/agent/{themes,prompts,extensions}`, backs up an
 existing `settings.json`, links this checkout, and merges only the pi-config
 settings it owns. It refuses to overwrite malformed or non-object JSON.
-Restart pi or run `/reload`, then select `decapod-atelier` if needed.
+Run the installer once from `~/src/pi-config`; the global symlinks then make
+this configuration available to pi sessions launched from any directory.
 
-Because links point at this checkout, `git pull` updates the installed files;
-move the checkout only after rerunning the installer. To remove the package,
-remove the three `pi-config-decapod` / `decapod-atelier` links and revert the
-settings keys using your backup.
+The extension watches this installed checkout and automatically queues a quiet
+pi reload after `git pull` changes the extension, theme, prompts, package, or
+installer. It waits until the current turn settles, debounces filesystem
+bursts, and cleans up watchers on shutdown. This is automatic **reload**, not
+silent network activity: pi-config never runs `git pull` for you. Set
+`PI_CONFIG_AUTO_RELOAD=0` to disable it, or use `PI_CONFIG_ROOT` when the
+checkout is mounted at a nonstandard path.
+
+Because links point at this checkout, `git pull` updates the installed files
+and the running pi session reloads them automatically. Move the checkout only
+after rerunning the installer. To remove the package, remove the three
+`pi-config-decapod` / `decapod-atelier` links and revert the settings keys
+using your backup.
 
 ## Governed rhythm
 

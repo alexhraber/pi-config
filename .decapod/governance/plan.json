@@ -1,15 +1,15 @@
 {
   "schema_version": "1.0.0",
-  "title": "Ultra-sleek hyper-productive pi visual system",
-  "intent": "Refine the personal pi configuration layout, color system, and governance status UI for high information density, calm attention, and productive long sessions.",
+  "title": "Global pi-config auto-reload",
+  "intent": "Install pi-config globally and automatically reload the running pi resources after explicit git pulls change the configuration.",
   "state": "APPROVED",
   "todo_ids": [
-    "fend_01m03pfaa3w1k37x"
+    "code_01m03px03jwrh7e5"
   ],
   "proof_hooks": [
-    "format=prettier --check extensions/decapod.ts themes/decapod-atelier.json README.md prompts/*.md",
-    "json=python3 -m json.tool themes/decapod-atelier.json",
-    "syntax=esbuild extensions/decapod.ts"
+    "format=prettier --check extensions/decapod.ts README.md package.json prompts/*.md themes/decapod-atelier.json",
+    "reload=esbuild extensions/decapod.ts",
+    "shell=bash -n install.sh"
   ],
   "unknowns": [],
   "human_questions": [],
@@ -23,5 +23,5 @@
     "file_touch_budget": null
   },
   "phases": [],
-  "updated_at": "1786830746Z"
+  "updated_at": "1786831238Z"
 }
