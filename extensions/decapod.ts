@@ -1,7 +1,8 @@
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { execFile } from "node:child_process";
 import { watch, type FSWatcher } from "node:fs";
-import { dirname, fileURLToPath, join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
@@ -193,7 +194,7 @@ export default function decapod(pi: ExtensionAPI) {
       { path: join(packageRoot, "extensions"), names: new Set(["decapod.ts"]) },
       {
         path: join(packageRoot, "themes"),
-        names: new Set(["decapod-atelier.json"]),
+        names: new Set(["decapod.json"]),
       },
       { path: join(packageRoot, "prompts"), names: undefined },
       {
