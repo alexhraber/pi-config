@@ -1,45 +1,36 @@
 {
   "schema_version": "1.1.0",
-  "run_id": "pi-config-public-polish-01",
-  "intent_id": "intent:pi-config-public-polish-01",
-  "task_id": "code_01m03n8eft9536bp",
-  "original_intent": "Make pi-config an ultra-beautiful, highly custom, automatic Decapod-centered first-class pi configuration and publish a proof-backed PR.",
-  "derived_intent": "Strengthen the pi extension and public documentation so intent governance is automatic, visible, uncertainty-preserving, and proof-gated.",
-  "current_phase": "implementation",
+  "run_id": "pi-atelier-ux-01",
+  "intent_id": "intent:pi-atelier-ux-01",
+  "task_id": "fend_01m03pfaa3w1k37x",
+  "original_intent": "Refine the personal pi configuration layout, color system, and governance status UI for high information density, calm attention, and productive long sessions.",
+  "derived_intent": "Polish the theme and make governance status legible, compact, and visually hierarchical.",
+  "current_phase": "visual refinement",
   "next_transitions": [
-    "container validation",
-    "publish pull request",
-    "run Decapod validation in container",
-    "validate and publish PR",
-    "validate then publish PR"
+    "run validation then publish PR",
+    "validate and publish PR"
   ],
   "active_boundaries": [
-    "Only pi-config source, prompts, theme, installer, README, and governed specs; no direct .decapod data mutation."
+    "Theme, extension UI, README; preserve Decapod authority and public CLI boundary."
   ],
   "repo_scope": [
     "pi-config repository"
   ],
   "inspected_files": [],
   "modified_files": [
-    ".decapod/governance/plan.json",
     "README.md",
-    "extensions/amnion.ts",
     "extensions/decapod.ts",
-    "install.sh",
-    "package.json",
-    "prompts"
+    "themes/decapod-atelier.json"
   ],
   "declared_commands": [
-    "bash -n install.sh",
     "npx esbuild extensions/decapod.ts --bundle --format=esm --platform=node --external:@earendil-works/pi-coding-agent",
-    "npx prettier --check extensions/amnion.ts prompts/*.md README.md",
-    "npx prettier --check extensions/decapod.ts README.md package.json prompts/*.md",
-    "python3 -m json.tool package.json"
+    "npx prettier --check extensions/decapod.ts themes/decapod-atelier.json README.md prompts/*.md",
+    "python3 -m json.tool themes/decapod-atelier.json"
   ],
   "tool_calls": [],
   "checks": [
     {
-      "name": "formatting",
+      "name": "format",
       "status": "passed"
     },
     {
@@ -47,27 +38,12 @@
       "status": "passed"
     },
     {
-      "name": "rename",
-      "status": "passed"
-    },
-    {
-      "name": "shell",
-      "status": "passed"
-    },
-    {
       "name": "syntax",
-      "status": "passed"
-    },
-    {
-      "name": "tool-governance",
       "status": "passed"
     }
   ],
   "evidence": [
-    "Amnion source renamed from decapod-atelier.ts and all package/install references updated",
-    "Async Decapod execution, tool and shell governance, session checkpoints, profiles, shortcuts, and proof-aware settlement implemented",
-    "Enhancement pass adds async calls, tool and shell gates, session checkpoints, profiles, shortcuts, and polished status UI.",
-    "pi-config owns the full personal pi configuration; Decapod is its native governance extension; Amnion remains independent"
+    "High-contrast slate/gold palette, framed status hierarchy, compact phase/profile/proof footer, and clearer keyboard-first widget guidance."
   ],
   "shortcut_risk_signals": [],
   "unresolved_assumptions": [],
@@ -78,21 +54,21 @@
     "shortcut_risk": "supported",
     "completion_proof": "supported"
   },
-  "artifact_hash": "sha256:6f0145c6f4c27b4303668b6ad8ea1bb0dbb9d88a72109f18c7d42c66145c59fb",
+  "artifact_hash": "sha256:7e46d33d63bfbec61853479ac3b908d483d5269a417ddb3d9879e2e00fbebf27",
   "custody": {
     "schema_version": "1.0.0",
     "intents": {
-      "intent:pi-config-public-polish-01": {
-        "id": "intent:pi-config-public-polish-01",
-        "raw_intent": "Make pi-config an ultra-beautiful, highly custom, automatic Decapod-centered first-class pi configuration and publish a proof-backed PR.",
-        "refined_intent": "Strengthen the pi extension and public documentation so intent governance is automatic, visible, uncertainty-preserving, and proof-gated.",
+      "intent:pi-atelier-ux-01": {
+        "id": "intent:pi-atelier-ux-01",
+        "raw_intent": "Refine the personal pi configuration layout, color system, and governance status UI for high information density, calm attention, and productive long sessions.",
+        "refined_intent": "Polish the theme and make governance status legible, compact, and visually hierarchical.",
         "acceptance_criteria": [],
         "constraints": [
           "pi-config repository"
         ],
         "assumptions": [],
         "boundaries": [
-          "Only pi-config source, prompts, theme, installer, README, and governed specs; no direct .decapod data mutation."
+          "Theme, extension UI, README; preserve Decapod authority and public CLI boundary."
         ],
         "out_of_scope": [],
         "proof_requirements": [],
@@ -105,135 +81,55 @@
       {
         "sequence": 2,
         "event_id": "event:2",
-        "intent_id": "intent:pi-config-public-polish-01",
+        "intent_id": "intent:pi-atelier-ux-01",
         "kind": "created"
       },
       {
         "sequence": 3,
         "event_id": "event:3",
-        "intent_id": "intent:pi-config-public-polish-01",
+        "intent_id": "intent:pi-atelier-ux-01",
         "kind": "refined"
       },
       {
         "sequence": 4,
         "event_id": "event:4",
-        "intent_id": "intent:pi-config-public-polish-01",
+        "intent_id": "intent:pi-atelier-ux-01",
         "kind": "trajectory_step_recorded",
-        "detail": "trajectory:pi-config-public-polish-01"
-      },
-      {
-        "sequence": 5,
-        "event_id": "event:5",
-        "intent_id": "intent:pi-config-public-polish-01",
-        "kind": "trajectory_step_recorded",
-        "detail": "trajectory:pi-config-public-polish-01"
-      },
-      {
-        "sequence": 6,
-        "event_id": "event:6",
-        "intent_id": "intent:pi-config-public-polish-01",
-        "kind": "trajectory_step_recorded",
-        "detail": "trajectory:pi-config-public-polish-01"
-      },
-      {
-        "sequence": 7,
-        "event_id": "event:7",
-        "intent_id": "intent:pi-config-public-polish-01",
-        "kind": "trajectory_step_recorded",
-        "detail": "trajectory:pi-config-public-polish-01"
+        "detail": "trajectory:pi-atelier-ux-01"
       }
     ],
     "trajectories": {
-      "pi-config-public-polish-01": {
-        "id": "pi-config-public-polish-01",
-        "intent_id": "intent:pi-config-public-polish-01",
+      "pi-atelier-ux-01": {
+        "id": "pi-atelier-ux-01",
+        "intent_id": "intent:pi-atelier-ux-01",
         "evidence_only": true,
         "steps": [
           {
             "sequence": 4,
             "action": "trajectory.record",
-            "command": "npx prettier --check extensions/amnion.ts prompts/*.md README.md",
+            "command": "npx prettier --check extensions/decapod.ts themes/decapod-atelier.json README.md prompts/*.md",
             "scope": [
               "pi-config repository"
             ],
             "observations": [
-              "extensions/amnion.ts",
+              "themes/decapod-atelier.json",
+              "extensions/decapod.ts",
               "README.md",
-              "install.sh",
-              "package.json",
-              "prompts",
-              "Amnion source renamed from decapod-atelier.ts and all package/install references updated"
+              "High-contrast slate/gold palette, framed status hierarchy, compact phase/profile/proof footer, and clearer keyboard-first widget guidance."
             ],
             "proof_refs": [
-              "formatting",
+              "format",
               "json",
-              "shell"
-            ],
-            "validation_findings": [],
-            "custody_event_id": "event:4"
-          },
-          {
-            "sequence": 5,
-            "action": "trajectory.record",
-            "scope": [
-              "pi-config repository"
-            ],
-            "observations": [
-              "extensions/decapod.ts",
-              "README.md",
-              "install.sh",
-              "package.json",
-              ".decapod/governance/plan.json",
-              "pi-config owns the full personal pi configuration; Decapod is its native governance extension; Amnion remains independent"
-            ],
-            "proof_refs": [
-              "rename"
-            ],
-            "validation_findings": [],
-            "custody_event_id": "event:5"
-          },
-          {
-            "sequence": 6,
-            "action": "trajectory.record",
-            "command": "npx prettier --check extensions/decapod.ts README.md package.json prompts/*.md",
-            "scope": [
-              "pi-config repository"
-            ],
-            "observations": [
-              "extensions/decapod.ts",
-              "README.md",
-              "package.json",
-              "Async Decapod execution, tool and shell governance, session checkpoints, profiles, shortcuts, and proof-aware settlement implemented"
-            ],
-            "proof_refs": [
-              "formatting",
               "syntax"
             ],
             "validation_findings": [],
-            "custody_event_id": "event:6"
-          },
-          {
-            "sequence": 7,
-            "action": "trajectory.record",
-            "scope": [
-              "pi-config repository"
-            ],
-            "observations": [
-              "extensions/decapod.ts",
-              "README.md",
-              "Enhancement pass adds async calls, tool and shell gates, session checkpoints, profiles, shortcuts, and polished status UI."
-            ],
-            "proof_refs": [
-              "tool-governance"
-            ],
-            "validation_findings": [],
-            "custody_event_id": "event:7"
+            "custody_event_id": "event:4"
           }
         ]
       }
     },
     "summaries": {},
     "knowledge_candidates": [],
-    "next_sequence": 7
+    "next_sequence": 4
   }
 }

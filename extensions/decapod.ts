@@ -135,8 +135,12 @@ export default function decapod(pi: ExtensionAPI) {
   let profile = "general";
   let proofState = "not-run";
 
-  const widget = (ctx: UiContext, title: string, lines: string[] = []) =>
-    ctx.ui.setWidget("decapod", [title, ...lines]);
+  const widget = (ctx: UiContext, title: string, lines: string[] = []) => {
+    const body = lines.length
+      ? lines.map((line) => `│ ${line}`)
+      : ["│ ready for intent"];
+    ctx.ui.setWidget("decapod", [`╭─ ${title}`, ...body, "╰─ decapod"]);
+  };
   const show = (
     ctx: UiContext,
     title: string,
@@ -144,7 +148,7 @@ export default function decapod(pi: ExtensionAPI) {
     extra: string[] = [],
   ) => widget(ctx, title, [...extra, ...display(result)]);
   const setPhase = (ctx: UiContext, phase: string) =>
-    ctx.ui.setStatus("decapod", `🦀 ${phase} · ${profile}`);
+    ctx.ui.setStatus("decapod", `🦀 ${phase}  ·  ${profile}  ·  ${proofState}`);
 
   pi.on("session_start", async (_event, ctx) => {
     originalIntent = "";
@@ -165,7 +169,8 @@ export default function decapod(pi: ExtensionAPI) {
     setPhase(ctx, proofState === "passed" ? "proof available" : "ready");
     widget(ctx, "🦀 Decapod · intent → context → proof", [
       "quiet governance active",
-      "Ctrl+Shift+D status · Ctrl+Shift+P preflight",
+      "Ctrl+Shift+D  status   ·   Ctrl+Shift+P  preflight",
+      "type naturally · evidence appears when it matters",
     ]);
   });
 

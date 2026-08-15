@@ -1,16 +1,15 @@
 {
   "schema_version": "1.0.0",
-  "title": "Sleek personal pi runtime with automatic Decapod governance",
-  "intent": "Make pi-config an ultra-beautiful personal pi configuration with quiet automatic Decapod governance across intent, tools, sessions, and proof.",
+  "title": "Ultra-sleek hyper-productive pi visual system",
+  "intent": "Refine the personal pi configuration layout, color system, and governance status UI for high information density, calm attention, and productive long sessions.",
   "state": "APPROVED",
   "todo_ids": [
-    "code_01m03n8eft9536bp"
+    "fend_01m03pfaa3w1k37x"
   ],
   "proof_hooks": [
-    "prettier=prettier --check extensions/decapod.ts prompts/*.md README.md",
+    "format=prettier --check extensions/decapod.ts themes/decapod-atelier.json README.md prompts/*.md",
     "json=python3 -m json.tool themes/decapod-atelier.json",
-    "shell=bash -n install.sh",
-    "validation=decapod validate"
+    "syntax=esbuild extensions/decapod.ts"
   ],
   "unknowns": [],
   "human_questions": [],
@@ -24,5 +23,5 @@
     "file_touch_budget": null
   },
   "phases": [],
-  "updated_at": "1786830386Z"
+  "updated_at": "1786830746Z"
 }
